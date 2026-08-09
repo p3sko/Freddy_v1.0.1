@@ -1,3 +1,5 @@
+![Freddy — Bot journalier sur X](assets/freddy-banner.png)
+
 # Freddy
 
 Freddy est un bot Python simple qui publie automatiquement un message daté sur X. Il peut être testé localement sans publier, puis exécuté chaque jour avec GitHub Actions, même lorsque l'ordinateur de son propriétaire est éteint.
