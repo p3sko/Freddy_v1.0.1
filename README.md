@@ -2,157 +2,159 @@
 
 # Freddy
 
-Freddy est un bot Python simple qui publie automatiquement un message daté sur X. Il peut être testé localement sans publier, puis exécuté chaque jour avec GitHub Actions, même lorsque l'ordinateur de son propriétaire est éteint.
+Freddy is a simple Python bot that automatically publishes a dated message on X\. It can be tested locally without publishing, then run every day with GitHub Actions, even when its owner’s computer is turned off\.
 
-Le projet utilise :
+The project uses:
 
-- Python ;
-- [Tweepy](https://www.tweepy.org/) pour communiquer avec l'API X ;
-- `python-dotenv` pour charger les variables locales ;
-- GitHub Actions pour la publication automatique.
+- Python;
+- [Tweepy](https://www.tweepy.org/) to communicate with the X API;
+- `python-dotenv` to load local variables;
+- GitHub Actions for automatic publishing\.
 
-## Fonctionnement
+## How it works
 
-À chaque exécution, le programme :
+On each run, the program:
 
-1. récupère la date actuelle ;
-2. traduit le mois en français ;
-3. construit le message ;
-4. vérifie qu'il ne dépasse pas 280 caractères ;
-5. affiche le message en mode simulation ou le publie sur X en mode réel.
+1. gets the current date;
+2. translates the month into French;
+3. builds the message;
+4. checks that it does not exceed 280 characters;
+5. displays the message in simulation mode or publishes it on X in real mode\.
 
-Le workflow peut être configuré pour s’exécuter chaque jour à l’heure et dans le fuseau horaire choisis par son utilisateur.
+> **Important:** the French month translation is intentional and is part of the current date-formatting logic in `bot_x.py`. The month names remain in French even though this README is in English. Do not remove or translate that mapping unless you also update the corresponding code and the desired output format.
 
-## Prérequis
+The workflow can be configured to run every day at the time and in the time zone chosen by its user\.
 
-- Python 3.13 recommandé ;
-- Git ;
-- un compte X ;
-- un accès à la [Developer Console de X](https://console.x.com/) ;
-- une application X autorisée à lire et publier des messages ;
-- un compte GitHub pour utiliser l'automatisation.
+## Requirements
 
-L'accès à l'API X et la publication peuvent dépendre de l'offre et des crédits disponibles sur le compte développeur.
+- Python 3\.13 recommended;
+- Git;
+- an X account;
+- access to the [X Developer Console](https://console.x.com/);
+- an X application authorized to read and publish messages;
+- a GitHub account to use the automation\.
 
-## 1. Récupérer le projet
+Access to the X API and publishing may depend on the plan and credits available on the developer account\.
 
-Cloner directement le dépôt :
+## 1\. Get the project
+
+Clone the repository directly:
 
 ```bash
 git clone https://github.com/p3sko/Freddy_v1.0.1.git
 cd Freddy_v1.0.1
 ```
 
-Pour créer sa propre version sur GitHub, il est préférable de cliquer sur **Fork** depuis la page du dépôt, puis de cloner ce fork.
+To create your own version on GitHub, it is preferable to click **Fork** from the repository page, then clone that fork\.
 
-## 2. Créer un environnement Python
+## 2\. Create a Python environment
 
-Créer l'environnement virtuel :
+Create the virtual environment:
 
 ```bash
 python -m venv .venv
 ```
 
-Sous Windows PowerShell :
+On Windows PowerShell:
 
 ```powershell
 .\.venv\Scripts\Activate.ps1
 ```
 
-Sous macOS ou Linux :
+On macOS or Linux:
 
 ```bash
 source .venv/bin/activate
 ```
 
-Installer les dépendances :
+Install the dependencies:
 
 ```bash
 python -m pip install -r requirements.txt
 ```
 
-## 3. Configurer l'application X
+## 3\. Configure the X application
 
-Dans la [Developer Console de X](https://console.x.com/) :
+In the [X Developer Console](https://console.x.com/):
 
-1. créer une application ;
-2. activer l'authentification utilisateur OAuth 1.0a ;
-3. accorder à l'application les droits de lecture et d'écriture ;
-4. générer l'API Key et son Secret ;
-5. générer l'Access Token et son Secret après avoir configuré les permissions.
+1. create an application;
+2. enable OAuth 1\.0a user authentication;
+3. grant the application read and write permissions;
+4. generate the API Key and its Secret;
+5. generate the Access Token and its Secret after configuring the permissions\.
 
-Le bot utilise quatre informations :
+The bot uses four pieces of information:
 
-| Variable | Identifiant X correspondant |
-| --- | --- |
-| `X_API_KEY` | API Key, aussi appelée Consumer Key |
-| `X_API_SECRET` | API Key Secret, aussi appelée Consumer Secret |
-| `X_ACCESS_TOKEN` | Access Token |
-| `X_ACCESS_TOKEN_SECRET` | Access Token Secret |
+|Variable               |Corresponding X identifier                 |
+|-----------------------|-------------------------------------------|
+|`X_API_KEY`            |API Key, also called Consumer Key          |
+|`X_API_SECRET`         |API Key Secret, also called Consumer Secret|
+|`X_ACCESS_TOKEN`       |Access Token                               |
+|`X_ACCESS_TOKEN_SECRET`|Access Token Secret                        |
 
-Le Bearer Token, le Client ID et le Client Secret ne sont pas utilisés par ce projet.
+The Bearer Token, Client ID, and Client Secret are not used by this project\.
 
-## 4. Configurer le fichier local `.env`
+## 4\. Configure the local `.env` file
 
-Créer un fichier nommé `.env` à la racine du projet :
+Create a file named `.env` at the root of the project:
 
 ```dotenv
-X_API_KEY=votre_api_key
-X_API_SECRET=votre_api_secret
-X_ACCESS_TOKEN=votre_access_token
-X_ACCESS_TOKEN_SECRET=votre_access_token_secret
+X_API_KEY=your_api_key
+X_API_SECRET=your_api_secret
+X_ACCESS_TOKEN=your_access_token
+X_ACCESS_TOKEN_SECRET=your_access_token_secret
 MODE_SIMULATION=true
 ```
 
-Ne jamais publier ce fichier. Il est déjà exclu par `.gitignore`, mais il faut toujours vérifier avant un commit :
+Never publish this file\. It is already excluded by `.gitignore`, but you should always check before a commit:
 
 ```bash
 git check-ignore -v .env
 ```
 
-Si une clé est affichée publiquement ou envoyée par erreur, elle doit être révoquée et régénérée immédiatement dans la Developer Console de X.
+If a key is displayed publicly or sent by mistake, it must be revoked and regenerated immediately in the X Developer Console\.
 
-## 5. Tester sans publier
+## 5\. Test without publishing
 
-Conserver cette valeur dans `.env` :
+Keep this value in `.env`:
 
 ```dotenv
 MODE_SIMULATION=true
 ```
 
-Puis lancer :
+Then run:
 
 ```bash
 python bot_x.py
 ```
 
-Le terminal doit afficher une ligne commençant par `[SIMULATION]`. Aucun message n'est alors envoyé sur X.
+The terminal should display a line beginning with `[SIMULATION]`\. No message is then sent to X\.
 
-## 6. Faire un test réel local
+## 6\. Run a real local test
 
-Attention : cette opération publie réellement sur le compte X associé aux Access Tokens.
+Warning: this operation actually publishes on the X account associated with the Access Tokens\.
 
-Modifier temporairement `.env` :
+Temporarily modify `.env`:
 
 ```dotenv
 MODE_SIMULATION=false
 ```
 
-Puis exécuter :
+Then run:
 
 ```bash
 python bot_x.py
 ```
 
-Après le test, remettre `MODE_SIMULATION=true` pour éviter une publication accidentelle.
+After the test, set `MODE_SIMULATION=true` again to avoid accidental publishing\.
 
-## 7. Activer GitHub Actions
+## 7\. Enable GitHub Actions
 
-Dans son propre dépôt GitHub, ouvrir :
+In your own GitHub repository, open:
 
 **Settings → Secrets and variables → Actions → New repository secret**
 
-Créer exactement ces quatre Repository secrets :
+Create exactly these four Repository secrets:
 
 ```text
 X_API_KEY
@@ -161,42 +163,42 @@ X_ACCESS_TOKEN
 X_ACCESS_TOKEN_SECRET
 ```
 
-Chaque secret reçoit la valeur correspondante obtenue auprès de X. Il ne faut pas créer de secret `MODE_SIMULATION` : le workflow le définit lui-même.
+Each secret receives the corresponding value obtained from X\. Do not create a `MODE_SIMULATION` secret: the workflow defines it itself\.
 
-Sur un fork, GitHub peut demander d'activer explicitement les workflows dans l'onglet **Actions**.
+On a fork, GitHub may require workflows to be explicitly enabled in the **Actions** tab\.
 
-Le fichier `.github/workflows/publication.yml` :
+The `.github/workflows/publication.yml` file:
 
-- installe Python 3.13 ;
-- installe les dépendances ;
-- injecte les quatre secrets dans l'environnement ;
-- définit `MODE_SIMULATION` à `false` ;
-- exécute `bot_x.py` quotidiennement.
+- installs Python 3\.13;
+- installs the dependencies;
+- injects the four secrets into the environment;
+- sets `MODE_SIMULATION` to `false`;
+- runs `bot_x.py` daily\.
 
-Le bouton **Run workflow** déclenche donc une véritable publication. Il ne constitue pas un mode simulation.
+The **Run workflow** button therefore triggers a real publication\. It is not a simulation mode\.
 
-## 8. Choisir l'heure et le fuseau horaire
+## 8\. Choose the time and time zone
 
-La planification se trouve dans `.github/workflows/publication.yml`. Le champ `cron` détermine les jours et l’heure d’exécution, tandis que le champ `timezone` accepte un identifiant de fuseau horaire IANA.
+Scheduling is located in `.github/workflows/publication.yml`\. The `cron` field determines the days and execution time, while the `timezone` field accepts an IANA time zone identifier\.
 
-Chaque utilisateur peut ainsi choisir sa propre heure de publication et son propre fuseau. L’utilisation d’un fuseau IANA permet à GitHub de gérer automatiquement les changements d’heure saisonniers.
+Each user can therefore choose their own publishing time and time zone\. Using an IANA time zone allows GitHub to automatically handle seasonal time changes\.
 
-Après toute modification du workflow, effectuer un commit et un push pour l'appliquer sur GitHub.
+After any modification to the workflow, make a commit and push it to apply it on GitHub\.
 
-## 9. Personnaliser le message
+## 9\. Customize the message
 
-Le texte est créé dans la fonction `creer_message()` de `bot_x.py`. La variable `date_formatee` peut être conservée dans la chaîne de caractères pour inclure automatiquement la date.
+The text is created in the `creer_message()` function in `bot_x.py`\. The `date_formatee` variable can be kept in the string to automatically include the date\.
 
-Après une modification :
+After a modification:
 
-1. lancer le bot en simulation ;
-2. vérifier le texte et sa longueur ;
-3. effectuer un commit ;
-4. envoyer le commit sur GitHub.
+1. run the bot in simulation mode;
+2. check the text and its length;
+3. make a commit;
+4. push the commit to GitHub\.
 
-Respectez les règles d'automatisation de X et évitez les publications répétitives ou indésirables.
+Follow X’s automation rules and avoid repetitive or unwanted publications\.
 
-## Structure du projet
+## Project structure
 
 ```text
 .
@@ -209,13 +211,13 @@ Respectez les règles d'automatisation de X et évitez les publications répéti
 └── README.md
 ```
 
-Le fichier `.env` et l'environnement `.venv` restent uniquement sur la machine locale et ne doivent pas apparaître dans le dépôt.
+The `.env` file and the `.venv` environment remain only on the local machine and must not appear in the repository\.
 
-## Dépannage
+## Troubleshooting
 
 ### `ModuleNotFoundError`
 
-Activer l'environnement virtuel, puis relancer :
+Activate the virtual environment, then run again:
 
 ```bash
 python -m pip install -r requirements.txt
@@ -223,33 +225,33 @@ python -m pip install -r requirements.txt
 
 ### `401 Unauthorized`
 
-Une ou plusieurs clés sont absentes, incorrectes, révoquées ou associées à une autre application. Vérifier les quatre variables sans afficher leurs valeurs publiquement.
+One or more keys are missing, incorrect, revoked, or associated with another application\. Check the four variables without displaying their values publicly\.
 
 ### `403 Forbidden`
 
-Vérifier que l'application X possède les droits de lecture et d'écriture. Si les permissions ont été modifiées après la création des Access Tokens, régénérer ces tokens.
+Check that the X application has read and write permissions\. If the permissions were changed after the Access Tokens were created, regenerate those tokens\.
 
 ### `You are not allowed to create a Tweet with duplicate content`
 
-X refuse une publication identique à une publication récente. Attendre que le message change ou modifier son contenu ; ne pas relancer plusieurs fois le même test réel.
+X refuses a publication identical to a recent publication\. Wait for the message to change or modify its content; do not run the same real test several times\.
 
-### GitHub Actions est vert, mais aucune publication n'apparaît
+### GitHub Actions is green, but no publication appears
 
-Ouvrir le lancement dans **Actions**, sélectionner le job `publier`, puis consulter l'étape **Exécuter le bot**. Dans la version actuelle, une erreur Tweepy est affichée par le programme mais n'entraîne pas nécessairement un statut rouge dans GitHub Actions.
+Open the run in **Actions**, select the `publier` job, then view the **Exécuter le bot** step\. In the current version, a Tweepy error is displayed by the program but does not necessarily result in a red status in GitHub Actions\.
 
 ### `Message trop long`
 
-Le texte produit dépasse 280 caractères. Raccourcir le message dans `creer_message()`.
+The generated text exceeds 280 characters\. Shorten the message in `creer_message()`\.
 
-## Sécurité
+## Security
 
-- Ne jamais écrire de clé directement dans `bot_x.py` ou dans le workflow.
-- Ne jamais committer `.env`.
-- Utiliser ses propres identifiants X après avoir forké le projet.
-- Ne jamais copier les clés du propriétaire original.
-- Régénérer immédiatement toute clé exposée.
-- Vérifier les journaux GitHub Actions sans y recopier de secrets.
+- Never write a key directly in `bot_x.py` or in the workflow\.
+- Never commit `.env`\.
+- Use your own X credentials after forking the project\.
+- Never copy the original owner’s keys\.
+- Immediately regenerate any exposed key\.
+- Check GitHub Actions logs without copying secrets into them\.
 
-## Licence
+## License
 
-Ce projet est distribué sous [licence MIT](LICENSE). Il peut être utilisé, copié, modifié et redistribué, y compris dans un cadre commercial, à condition de conserver la notice de licence et de copyright.
+This project is distributed under the [MIT License](LICENSE)\. It may be used, copied, modified, and redistributed, including for commercial purposes, provided that the license and copyright notice are retained\.(LICENSE). Il peut être utilisé, copié, modifié et redistribué, y compris dans un cadre commercial, à condition de conserver la notice de licence et de copyright.
