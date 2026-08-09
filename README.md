@@ -256,4 +256,4 @@ Le texte produit dépasse 280 caractères. Raccourcir le message dans `creer_mes
 
 ## Licence
 
-Pour autoriser clairement la réutilisation, la modification et la redistribution du projet, ajoutez une licence open source au dépôt. La licence MIT convient à un projet permissif et réutilisable.
+Ce projet est distribué sous [licence MIT](LICENSE). Il peut être utilisé, copié, modifié et redistribué, y compris dans un cadre commercial, à condition de conserver la notice de licence et de copyright.
