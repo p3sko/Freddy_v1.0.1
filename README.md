@@ -21,7 +21,7 @@ Le projet utilise :
 4. vérifie qu'il ne dépasse pas 280 caractères ;
 5. affiche le message en mode simulation ou le publie sur X en mode réel.
 
-Le workflow fourni est programmé chaque jour à **04 h 20**, dans le fuseau `Europe/Brussels`.
+Le workflow peut être configuré pour s’exécuter chaque jour à l’heure et dans le fuseau horaire choisis par son utilisateur.
 
 ## Prérequis
 
@@ -175,17 +175,11 @@ Le fichier `.github/workflows/publication.yml` :
 
 Le bouton **Run workflow** déclenche donc une véritable publication. Il ne constitue pas un mode simulation.
 
-## 8. Changer l'heure de publication
+## 8. Choisir l'heure et le fuseau horaire
 
-La planification se trouve dans `.github/workflows/publication.yml` :
+La planification se trouve dans `.github/workflows/publication.yml`. Le champ `cron` détermine les jours et l’heure d’exécution, tandis que le champ `timezone` accepte un identifiant de fuseau horaire IANA.
 
-```yaml
-schedule:
-  - cron: "20 4 * * *"
-    timezone: "Europe/Brussels"
-```
-
-Ici, `20 4 * * *` signifie « tous les jours à 04 h 20 ». Le fuseau IANA permet à GitHub de gérer automatiquement les changements d'heure saisonniers.
+Chaque utilisateur peut ainsi choisir sa propre heure de publication et son propre fuseau. L’utilisation d’un fuseau IANA permet à GitHub de gérer automatiquement les changements d’heure saisonniers.
 
 Après toute modification du workflow, effectuer un commit et un push pour l'appliquer sur GitHub.
 
